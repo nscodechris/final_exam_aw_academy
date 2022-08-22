@@ -13,10 +13,10 @@ x_list = []
 y_list = []
 
 data = pd.read_csv(CURR_DIR_PATH + "//final.csv")
-print(data.info)
+# print(data.info)
 
 x_data = data["population"]
-y_data = data["coal_electricity"]
+y_data = data["coal_consumption"]
 
 # append values from data_set to list
 for i in x_data:
@@ -38,12 +38,12 @@ x, y = x_list, y_list
 
 # Split the data into training/testing sets
 
-x_train = x[:-200]
-x_test = x[-200:]
+x_train = x[:-1500]
+x_test = x[-1500:]
 
 # Split the targets into training/testing sets
-y_train = y[:-200]
-y_test = y[-200:]
+y_train = y[:-1500]
+y_test = y[-1500:]
 
 # Create linear regression object
 regr = linear_model.LinearRegression()
@@ -73,4 +73,3 @@ plt.xlabel(f"{x_data.name}")
 plt.ylabel(f"{y_data.name}")
 # plt.show()
 plt.show()
-
