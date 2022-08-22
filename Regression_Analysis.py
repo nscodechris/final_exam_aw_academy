@@ -9,8 +9,6 @@ from sklearn import linear_model
 # setting the curr dir path
 CURR_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
-x_list = []
-y_list = []
 
 data = pd.read_csv(CURR_DIR_PATH + "//final.csv")
 # print(data.info)
@@ -18,16 +16,9 @@ data = pd.read_csv(CURR_DIR_PATH + "//final.csv")
 x_data = data["population"]
 y_data = data["coal_consumption"]
 
-# append values from data_set to list
-for i in x_data:
-    x_list.append(i)
-
-for z in y_data:
-    y_list.append(z)
-
 # making array of list
-x_list = np.array(x_list)
-y_list = np.array(y_list)
+x_list = np.array(x_data)
+y_list = np.array(y_data)
 
 # making 2d array of list
 x_list = np.reshape(x_list, (-1, 1))
