@@ -54,6 +54,7 @@ final_df = year_filtering.replace(np.nan, 0)
 
 # final_df to csv file
 # final_df.to_csv(CURR_DIR_PATH + "//final.csv", index=False)
+# final_df.to_csv(CURR_DIR_PATH + "//regression.csv", index=False)
 
 def pandas_to_database():
     df_final_exam = pd.read_csv(CURR_DIR_PATH + "//final.csv")
