@@ -4,8 +4,17 @@ import numpy as np
 from kaggle.api.kaggle_api_extended import KaggleApi
 from sqlalchemy import create_engine
 import psycopg2
-import kaggle_log_in as kglog
 import pycountry
+
+
+class EtlData:
+    def __init__(self):
+        self.data = pd.DataFrame()
+        self.final_df = pd.DataFrame()
+        self.regression_df = pd.DataFrame()
+
+
+etl = EtlData()
 
 # glob variables get countries & continents
 countries_in_world = []
@@ -23,24 +32,24 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
-def get_data(data_set):
+def get_data(data_set, user_name, user_name_2, api_key, api_key_2):
     # downloading the dataset from kaggle
     # getting user name and kaggle api
-    os.environ[kglog.user_name] = kglog.user_name_2
-    os.environ[kglog.api_key] = kglog.api_key_2
+    os.environ[user_name] = user_name_2
+    os.environ[api_key] = api_key_2
     api = KaggleApi()
     api.authenticate()
     api.dataset_download_files(data_set, path=CURR_DIR_PATH, unzip=True)
 
 
-# get_data('pralabhpoudel/world-energy-consumption')
+# get_data('pralabhpoudel/world-energy-consumption', kglog.user_name, kglog.user_name_2, kglog.api_key, kglog.api_key_2)
 
 
 def data_to_pandas(file, filter_year):
     # data-set to pandas
-    data = pd.read_csv(CURR_DIR_PATH + file)
+    etl.data = pd.read_csv(CURR_DIR_PATH + file)
     # Filter by needed columns
-    data = data[["country", "year", "population", "energy_per_gdp", "electricity_generation",
+    etl.data = etl.data[["country", "year", "population", "energy_per_gdp", "electricity_generation",
                  "coal_share_energy", "coal_electricity", "coal_consumption",
                  "gas_share_elec", "gas_electricity", "gas_consumption",
                  "nuclear_share_elec", "nuclear_electricity", "nuclear_consumption",
@@ -50,16 +59,18 @@ def data_to_pandas(file, filter_year):
     if filter_year == "yes":
         # filter years
         specific_years = [1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2019]
-        year_filtering = data.loc[data['year'].isin(specific_years)]
+        year_filtering = etl.data.loc[etl.data['year'].isin(specific_years)]
         # replace NaN values with 0 (zero)
-        final_df = year_filtering.replace(np.nan, 0)
-        return final_df
+        etl.final_df = year_filtering.replace(np.nan, 0)
+        return etl.final_df
         # final_df to csv file
     elif filter_year == "no":
         # replace NaN values with 0 (zero)
-        final_regression = data.replace(np.nan, 0)
-        return final_regression
+        etl.regression_df = etl.data.replace(np.nan, 0)
+        return etl.regression_df
 
+
+# data_to_pandas("//World Energy Consumption.csv", "yes")
 
 def cleaning_data_to_csv(data):
     # replace NaN values with 0 (zero)
@@ -83,20 +94,25 @@ def cleaning_data_to_csv(data):
     data_all_continents = data.apply(lambda x: x[data["country"].isin(continents)])
     data_non_countries_list = data.apply(lambda x: x[data["country"].isin(non_countries)])
 
-    data_all_countries.to_csv(CURR_DIR_PATH + 'counries', index=False)
+    data_all_countries.to_csv(CURR_DIR_PATH + 'countries', index=False)
     data_all_continents.to_csv(CURR_DIR_PATH + 'continents', index=False)
     data_non_countries_list.to_csv(CURR_DIR_PATH + 'non_countries', index=False)
 
 
-def pandas_to_database(dest, table_name):
-    df_final_exam = pd.read_csv(CURR_DIR_PATH + dest)
+# cleaning_data_to_csv(etl.final_df)
+
+
+
+def pandas_to_database(file_name, table_name, postgress_pass):
+    df_final_exam = pd.read_csv(CURR_DIR_PATH + file_name)
     # print(df_final_exam)
-    engine = create_engine(f'postgresql://postgres:{kglog.postgress_pass}@localhost:5432/final_exam')
+    engine = create_engine(f'postgresql://postgres:{postgress_pass}@localhost:5432/final_exam')
     df_final_exam.to_sql(table_name, engine, if_exists='replace', index=False)
     with engine.connect() as connection:
         connection.execute(f"ALTER TABLE {table_name} ADD COLUMN ID_column serial PRIMARY KEY;")
 
-# pandas_to_database("//final.csv", "final")
+
+# pandas_to_database("//final.csv", "final", kglog.postgress_pass)
 
 
 
