@@ -6,6 +6,10 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+import plotly.express as oPlotly
+import plotly.graph_objs as oGraph
+
 
 
 # set options for pandas to see all rows, columns
@@ -59,6 +63,10 @@ def liner_regre(x_data, y_data, test_size):
 
     # The coefficients
     print("Coefficients: \n", regr.coef_)
+    # The mean squared error
+    print("Mean squared error: %.2f" % mean_squared_error(y_test, y_pred))
+    # The coefficient of determination: 1 is perfect prediction
+    print("Coefficient of determination(correlation): %.2f" % r2_score(y_test, y_pred))
 
 
 
@@ -74,10 +82,10 @@ def liner_regre(x_data, y_data, test_size):
     plt.title(f"{x_data.name}, {y_data.name}")
     plt.xlabel(f"{x_data.name}")
     plt.ylabel(f"{y_data.name}")
-    # plt.show()
-    # plt.show()
+    plt.show()
+    plt.show()
 
 
-liner_regre(data["population"], data["coal_consumption"], 0.20)
+liner_regre(data["population"], data["coal_consumption"], 0.25)
 
 

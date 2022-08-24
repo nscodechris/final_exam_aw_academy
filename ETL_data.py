@@ -11,7 +11,7 @@ class EtlData:
     def __init__(self):
         self.data = pd.DataFrame()
         self.final_df = pd.DataFrame()
-        self.regression_df = pd.DataFrame()
+        self.power_bi = pd.DataFrame()
 
 
 etl = EtlData()
@@ -56,18 +56,25 @@ def data_to_pandas(file, filter_year):
                  "solar_share_elec", "solar_electricity", "solar_consumption",
                  "wind_share_elec", "wind_electricity", "wind_consumption"]]
 
+    # Filter by selected countries
+    countries = [
+        "Afghanistan", "Brazil", "China", "Denmark", "India",
+        "Italy", "Japan", "North Korea", "Russia", "Saudi Arabia", "United States", "Sweden"]
+
+    etl.data = etl.data.loc[etl.data['country'].isin(countries)]
+
     if filter_year == "yes":
         # filter years
-        specific_years = 1960  # [1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2019]
-        year_filtering = etl.data.loc[etl.data['year'] >= specific_years]  # .isin(specific_years)]
+        specific_years = [1985, 1990, 1995, 2000, 2005, 2010, 2019]
+        year_filtering = etl.data.loc[etl.data['year'].isin(specific_years)]  # .isin(specific_years)]
         # replace NaN values with 0 (zero)
         etl.final_df = year_filtering.replace(np.nan, 0)
         return etl.final_df
         # final_df to csv file
     elif filter_year == "no":
         # replace NaN values with 0 (zero)
-        etl.regression_df = etl.data.replace(np.nan, 0)
-        return etl.regression_df
+        etl.power_bi = etl.data.replace(np.nan, 0)
+        return etl.power_bi
 
 
 # data_to_pandas("//World Energy Consumption.csv", "yes")
@@ -99,7 +106,7 @@ def cleaning_data_to_csv(data):
     data_non_countries_list.to_csv(CURR_DIR_PATH + '//non_countries.csv', index=False)
 
 
-# cleaning_data_to_csv(etl.final_df)
+# cleaning_data_to_csv(etl.power_bi)
 
 
 
@@ -112,7 +119,7 @@ def pandas_to_database(file_name, table_name, postgress_pass):
         connection.execute(f"ALTER TABLE {table_name} ADD COLUMN ID_column serial PRIMARY KEY;")
 
 
-# pandas_to_database("//final.csv", "final", kglog.postgress_pass)
+# pandas_to_database("//countries.csv", "final", kglog.postgress_pass)
 
 
 
