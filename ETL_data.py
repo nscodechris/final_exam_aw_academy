@@ -7,7 +7,6 @@ import psycopg2
 import kaggle_log_in as kglog
 import pycountry
 
-
 # glob variables get countries & continents
 countries_in_world = []
 countries_to_use = []
@@ -38,8 +37,6 @@ def get_data(data_set):
 
 
 def data_to_pandas(file, filter_year):
-
-
     # data-set to pandas
     data = pd.read_csv(CURR_DIR_PATH + file)
     # Filter by needed columns
@@ -99,8 +96,8 @@ def pandas_to_database(dest, table_name):
     with engine.connect() as connection:
         connection.execute(f"ALTER TABLE {table_name} ADD COLUMN ID_column serial PRIMARY KEY;")
 
-
 # pandas_to_database("//final.csv", "final")
+
 
 
 

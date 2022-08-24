@@ -5,8 +5,6 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn import linear_model
-import pycountry
-
 
 
 # set options for pandas to see all rows, columns
@@ -17,37 +15,9 @@ pd.set_option('display.width', None)
 # setting the curr dir path
 CURR_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
+# regression
+data = pd.read_csv(CURR_DIR_PATH + "//regression.csv")
 
-data = pd.read_csv(CURR_DIR_PATH + "//final.csv")
-
-# Getting unique country values, to see countries in data_set
-unique_country_values = data['country'].unique()
-# print(unique_country_values)
-
-countries_in_world = []
-countries_to_use = []
-non_countries = []
-
-# get country name from pycountry to countries_in_world list
-for country in pycountry.countries:
-    # print(country.name)
-    countries_in_world.append(country.name)
-
-# checking if countries_in_world list is in data_set
-for i in countries_in_world:
-    if i in unique_country_values:
-        countries_to_use.append(i)
-
-# non countries from data_set - getting out the continents
-for q in unique_country_values:
-    if q not in countries_in_world:
-        non_countries.append(q)
-
-data = data.apply(lambda x: x[data["country"].isin(countries_to_use)])
-# data["population"] = data["population"].astype(int)
-print(non_countries)
-print(countries_to_use)
-# print(data)
 
 def liner_regre(x_data, y_data, split):
 
@@ -64,11 +34,11 @@ def liner_regre(x_data, y_data, split):
     x, y = x_list, y_list
     print(f"value of x: {len(x)}")
     # Split the data into training/testing sets
-    x_train = x[:-split]
+    x_train = x[5:-split]
     x_test = x[-split:]
 
     # Split the targets into training/testing sets
-    y_train = y[:-split]
+    y_train = y[5:-split]
     y_test = y[-split:]
 
     # Create linear regression object
@@ -101,5 +71,6 @@ def liner_regre(x_data, y_data, split):
     # plt.show()
     plt.show()
 
-# liner_regre(data["population"], data["coal_consumption"], 800)
+# liner_regre(data["population"], data["coal_consumption"], 30)
+
 
