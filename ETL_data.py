@@ -58,8 +58,8 @@ def data_to_pandas(file, filter_year):
 
     if filter_year == "yes":
         # filter years
-        specific_years = [1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2019]
-        year_filtering = etl.data.loc[etl.data['year'].isin(specific_years)]
+        specific_years = 1960  # [1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2019]
+        year_filtering = etl.data.loc[etl.data['year'] >= specific_years]  # .isin(specific_years)]
         # replace NaN values with 0 (zero)
         etl.final_df = year_filtering.replace(np.nan, 0)
         return etl.final_df
@@ -94,9 +94,9 @@ def cleaning_data_to_csv(data):
     data_all_continents = data.apply(lambda x: x[data["country"].isin(continents)])
     data_non_countries_list = data.apply(lambda x: x[data["country"].isin(non_countries)])
 
-    data_all_countries.to_csv(CURR_DIR_PATH + 'countries', index=False)
-    data_all_continents.to_csv(CURR_DIR_PATH + 'continents', index=False)
-    data_non_countries_list.to_csv(CURR_DIR_PATH + 'non_countries', index=False)
+    data_all_countries.to_csv(CURR_DIR_PATH + '//countries.csv', index=False)
+    data_all_continents.to_csv(CURR_DIR_PATH + '//continents.csv', index=False)
+    data_non_countries_list.to_csv(CURR_DIR_PATH + '//non_countries.csv', index=False)
 
 
 # cleaning_data_to_csv(etl.final_df)

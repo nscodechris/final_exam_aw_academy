@@ -9,7 +9,7 @@ def main():
     ETL_data.data_to_pandas("//World Energy Consumption.csv", "yes")
     # print(ETL_data.etl.final_df)
     ETL_data.cleaning_data_to_csv(ETL_data.etl.final_df)
-    ETL_data.pandas_to_database("//final.csv", "final", kglog.postgress_pass)
+    # ETL_data.pandas_to_database("//countries.csv", "final", kglog.postgress_pass)
 
 
 if __name__ == "__main__":

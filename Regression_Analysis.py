@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn import linear_model
+from sklearn.model_selection import train_test_split
 
 
 # set options for pandas to see all rows, columns
@@ -16,10 +17,10 @@ pd.set_option('display.width', None)
 CURR_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 # regression
-data = pd.read_csv(CURR_DIR_PATH + "//regression.csv")
+data = pd.read_csv(CURR_DIR_PATH + "//countries.csv")
 
 
-def liner_regre(x_data, y_data, split):
+def liner_regre(x_data, y_data, test_size):
 
     # making array of list
     x_list = np.array(x_data)
@@ -30,16 +31,21 @@ def liner_regre(x_data, y_data, split):
     x_list = np.reshape(x_list, (-1, 1))
     y_list = np.reshape(y_list, (-1, 1))
 
-    # setting variable x & y
-    x, y = x_list, y_list
-    print(f"value of x: {len(x)}")
-    # Split the data into training/testing sets
-    x_train = x[5:-split]
-    x_test = x[-split:]
+    # SZ = 100
+    # x_list, y_list = data.make_regression(n_samples=SZ, n_features=1,noise=30)
+    x_train, x_test, y_train, y_test = train_test_split(x_list, y_list, test_size=test_size)
 
-    # Split the targets into training/testing sets
-    y_train = y[5:-split]
-    y_test = y[-split:]
+
+    # setting variable x & y
+    # x, y = x_list, y_list
+    # print(f"value of x: {len(x)}")
+    # # Split the data into training/testing sets
+    # x_train = x[5:-split]
+    # x_test = x[-split:]
+    #
+    # # Split the targets into training/testing sets
+    # y_train = y[5:-split]
+    # y_test = y[-split:]
 
     # Create linear regression object
     regr = linear_model.LinearRegression()
@@ -69,8 +75,9 @@ def liner_regre(x_data, y_data, split):
     plt.xlabel(f"{x_data.name}")
     plt.ylabel(f"{y_data.name}")
     # plt.show()
-    plt.show()
+    # plt.show()
 
-# liner_regre(data["population"], data["coal_consumption"], 30)
+
+liner_regre(data["population"], data["coal_consumption"], 0.20)
 
 
