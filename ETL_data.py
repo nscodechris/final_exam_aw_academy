@@ -54,7 +54,7 @@ def data_to_pandas(file, filter_year):
 
     # Filter by selected countries
     countries = [
-        "Afghanistan", "Brazil", "China", "Denmark", "India",
+        "Brazil", "China", "Denmark", "India",
         "Italy", "Japan", "North Korea", "Russia", "Saudi Arabia", "United States", "Sweden"]
 
     etl.data = etl.data.loc[etl.data['country'].isin(countries)]
@@ -62,7 +62,7 @@ def data_to_pandas(file, filter_year):
     if filter_year == "yes":
         # filter years
         specific_years = [i for i in range(1985, 2020)]  # [1985, 1990, 1995, 2000, 2005, 2010, 2019]
-        print(specific_years)
+        # print(specific_years)
         year_filtering = etl.data.loc[etl.data['year'].isin(specific_years)]  # .isin(specific_years)
         # replace NaN values with 0 (zero)
         etl.final_df = year_filtering.replace(np.nan, 0)
