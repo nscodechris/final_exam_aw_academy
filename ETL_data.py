@@ -61,7 +61,7 @@ def data_to_pandas(file, filter_year):
 
     if filter_year == "yes":
         # filter years
-        specific_years = [i for i in range(1985, 2020)]  # [1985, 1990, 1995, 2000, 2005, 2010, 2019]
+        specific_years = [i for i in range(1960, 2020)]  # [1985, 1990, 1995, 2000, 2005, 2010, 2019]
         # print(specific_years)
         year_filtering = etl.data.loc[etl.data['year'].isin(specific_years)]  # .isin(specific_years)
         # replace NaN values with 0 (zero)

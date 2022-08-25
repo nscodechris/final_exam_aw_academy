@@ -23,9 +23,22 @@ pd.set_option('display.width', None)
 
 # regression
 
+data_1960_1970 = data.loc[data['year'].isin(i for i in range(1960, 1970))]
+data_1970_1980 = data.loc[data['year'].isin(i for i in range(1970, 1980))]
+data_1980_1990 = data.loc[data['year'].isin(i for i in range(1980, 1990))]
+data_1990_2000 = data.loc[data['year'].isin(i for i in range(1990, 2000))]
+data_2000_2010 = data.loc[data['year'].isin(i for i in range(2000, 2010))]
 
 
 app = Dash(__name__)
+
+year = {'1960-1969': data_1960_1970,
+          '1970-1979': data_1970_1980,
+          '1980-1989': data_1980_1990,
+          '1990-1999': data_1990_2000,
+        '2000-2010': data_2000_2010
+          }
+
 
 energy = {'coal_consumption': data.coal_consumption,
           'gas_consumption': data.gas_consumption,
@@ -61,7 +74,13 @@ app.layout = html.Div([
     dcc.Dropdown(
         id='dropdown_2',
         options=["population", "energy_per_gdp", "electricity_generation", 'gdp'],
-        value='population',
+        value='gdp',
+        clearable=False
+    ),
+    dcc.Dropdown(
+        id='dropdown_3',
+        options=["1960-1969", "1970-1979", "1980-1989", '1990-1999', '2000-2010'],
+        value='1960-1969',
         clearable=False
     ),
 
@@ -74,12 +93,17 @@ app.layout = html.Div([
 @app.callback(
     Output("graph", "figure"),
     Input('dropdown', "value"),
-    Input('dropdown_2', "value"))
-def train_and_display(name, sort):
+    Input('dropdown_2', "value"),
+    Input('dropdown_3', "value"))
+def train_and_display(name, sort, year_choice):
 
-    X = x_axis[sort].values[:, None] #  df.population.values[:, None]
+    X = year[year_choice][sort].values[:, None]
     X_train, X_test, y_train, y_test = train_test_split(
-        X, energy[name], test_size=0.30)
+        X,  year[year_choice][name], test_size=0.25)
+
+    # X = x_axis[sort].values[:, None] #  df.population.values[:, None]
+    # X_train, X_test, y_train, y_test = train_test_split(
+    #     X, energy[name], test_size=0.30)
 
     model = LinearRegression()
     model.fit(X_train, y_train)
