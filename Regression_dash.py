@@ -31,7 +31,9 @@ energy = {'coal_consumption': data.coal_consumption,
 
 x_axis = {'population': data.population,
           'energy_per_gdp': data.energy_per_gdp,
-          'electricity_generation': data.electricity_generation}
+          'electricity_generation': data.electricity_generation,
+          'gdp': data.gdp
+          }
 
 
 app.layout = html.Div([
@@ -46,7 +48,7 @@ app.layout = html.Div([
     dcc.Graph(id="graph"),
     dcc.Dropdown(
         id='dropdown_2',
-        options=["population", "energy_per_gdp", "electricity_generation"],
+        options=["population", "energy_per_gdp", "electricity_generation", 'gdp'],
         value='population',
         clearable=False
     ),

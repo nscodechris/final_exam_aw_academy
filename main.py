@@ -11,7 +11,8 @@ def main():
     ETL_data.data_to_pandas("//World Energy Consumption.csv", "yes")
 
     # select etl.power_bi for power bi, etl.final_df for filter_data_frame
-    ETL_data.cleaning_data_to_csv(ETL_data.etl.final_df)  # etl.power_bi, etl.final_df
+    ETL_data.cleaning_data_to_csv(ETL_data.etl.final_df, '//countries.csv', '//continents.csv'
+                                  , '//non_countries.csv')  # enter 3 file names like: "//countries.csv"
 
     ETL_data.pandas_to_database("//countries.csv", "final", kglog.postgress_pass)
 
