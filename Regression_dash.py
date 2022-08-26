@@ -95,13 +95,25 @@ app.layout = html.Div([
     Input('dropdown', "value"),
     Input('dropdown_2', "value"),
     Input('dropdown_3', "value"))
-def train_and_display(name, sort, year_choice):
+def train_and_display(energy_choice, x_axis_choice, year_choice):
+    values_use = []
+    group = year[year_choice].groupby('country')[[x_axis_choice]].mean()
+    for i in group[x_axis_choice]:
+        values_use.append(i)
+    list_pandas = pd.Series(i for i in values_use)
 
-    X = year[year_choice][sort].values[:, None]
+    values_use_2 = []
+    group_energy = year[year_choice].groupby('country')[[energy_choice]].mean()
+    for i in group_energy[energy_choice]:
+        values_use_2.append(i)
+    list_pandas_2 = pd.Series(i for i in values_use_2)
+
+    X = list_pandas.values[:, None]
     X_train, X_test, y_train, y_test = train_test_split(
-        X,  year[year_choice][name], test_size=0.25)
+        X,  list_pandas_2, test_size=0.25)
 
-    # X = x_axis[sort].values[:, None] #  df.population.values[:, None]
+    # doesnt calculate mean value: code below
+    # X = year[year_choice][x_axis_choice].values[:, None]
     # X_train, X_test, y_train, y_test = train_test_split(
     #     X, energy[name], test_size=0.30)
 
