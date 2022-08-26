@@ -53,11 +53,11 @@ def data_to_pandas(file, filter_year):
                  "wind_share_elec", "wind_electricity", "wind_consumption"]]
 
     # Filter by selected countries
-    countries = [
-        "Brazil", "China", "Denmark", "India",
-        "Italy", "Japan", "North Korea", "Russia", "Saudi Arabia", "United States", "Sweden"]
-
-    etl.data = etl.data.loc[etl.data['country'].isin(countries)]
+    # countries = [
+    #     "Brazil", "China", "Denmark", "India",
+    #     "Italy", "Japan", "North Korea", "Russia", "Saudi Arabia", "United States", "Sweden"]
+    #
+    # etl.data = etl.data.loc[etl.data['country'].isin(countries)]
 
     if filter_year == "yes":
         # filter years

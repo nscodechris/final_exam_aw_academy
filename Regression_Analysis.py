@@ -22,6 +22,7 @@ CURR_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 # regression
 data = pd.read_csv(CURR_DIR_PATH + "//countries.csv")
+data = data.loc[data['year'].isin(i for i in range(1960, 1970))]
 
 
 def liner_regre(x_data, y_data, test_size):
@@ -86,6 +87,6 @@ def liner_regre(x_data, y_data, test_size):
     plt.show()
 
 
-liner_regre(data["population"], data["coal_consumption"], 0.25)
+liner_regre(data["gdp"], data["coal_consumption"], 0.30)
 
 
