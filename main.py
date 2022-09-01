@@ -1,6 +1,9 @@
 import ETL_data
 import kaggle_log_in as kglog
-import Regression_dash as rd
+# import Regression_dash as rd
+
+
+
 
 def main():
 
@@ -9,12 +12,15 @@ def main():
 
     # select no if extracting to power bi, for all data, yes for filter data
     ETL_data.data_to_pandas("//World Energy Consumption.csv", "yes")
-
+    print("\n\n\n")
+    print("CLEANED DATA")
+    print("----"*100)
     # select etl.power_bi for power bi, etl.final_df for filter_data_frame
     ETL_data.cleaning_data_to_csv(ETL_data.etl.final_df, '//countries.csv', '//continents.csv'
                                   , '//non_countries.csv')  # enter 3 file names like: "//countries.csv"
 
-    ETL_data.pandas_to_database("//countries.csv", "final", kglog.postgress_pass)
+    # ETL_data.pandas_to_database("//countries.csv", "final", kglog.postgress_pass)
+
 
 
 if __name__ == "__main__":

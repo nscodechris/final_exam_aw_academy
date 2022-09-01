@@ -1,10 +1,13 @@
 import os
+
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 from kaggle.api.kaggle_api_extended import KaggleApi
 from sqlalchemy import create_engine
 import psycopg2
 import pycountry
+import seaborn as sns
 
 
 class EtlData:
@@ -44,6 +47,7 @@ def get_data(data_set, user_name, user_name_2, api_key, api_key_2):
 def data_to_pandas(file, filter_year):
     # data-set to pandas
     etl.data = pd.read_csv(CURR_DIR_PATH + file)
+    print(etl.data.head(100))
     # Filter by needed columns
     etl.data = etl.data[["country", "year", "population", "energy_per_gdp", "gdp", "electricity_generation",
                  "coal_share_energy", "coal_electricity", "coal_consumption",
@@ -52,7 +56,7 @@ def data_to_pandas(file, filter_year):
                  "solar_share_elec", "solar_electricity", "solar_consumption",
                  "wind_share_elec", "wind_electricity", "wind_consumption"]]
 
-    # Filter by selected countries
+    # # Filter by selected countries
     # countries = [
     #     "Brazil", "China", "Denmark", "India",
     #     "Italy", "Japan", "North Korea", "Russia", "Saudi Arabia", "United States", "Sweden"]
@@ -95,6 +99,7 @@ def cleaning_data_to_csv(data, country_csv, continent_csv, non_countries_csv):
     data_all_countries = data.apply(lambda x: x[data["country"].isin(countries_to_use)])
     data_all_continents = data.apply(lambda x: x[data["country"].isin(continents)])
     data_non_countries_list = data.apply(lambda x: x[data["country"].isin(non_countries)])
+    print(data_all_countries.head(100))
 
     data_all_countries.to_csv(CURR_DIR_PATH + country_csv, index=False)
     data_all_continents.to_csv(CURR_DIR_PATH + continent_csv, index=False)

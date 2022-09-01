@@ -9,15 +9,19 @@ import numpy as np
 import os
 import pandas as pd
 from sklearn.metrics import mean_squared_error, r2_score
-
+from scipy import stats
 
 CURR_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 data = pd.read_csv(CURR_DIR_PATH + "//countries.csv")
+
 
 # set options for pandas to see all rows, columns
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
+
+
+
 
 # setting the curr dir path
 
@@ -96,8 +100,20 @@ app.layout = html.Div([
     Input('dropdown_2', "value"),
     Input('dropdown_3', "value"))
 def train_and_display(energy_choice, x_axis_choice, year_choice):
+    # detect outliers and remove
+
+    mean = year[year_choice][x_axis_choice].mean()
+    sd = year[year_choice][x_axis_choice].std()
+    # mean_2 = year[year_choice][energy_choice].mean()
+    # sd_2 = year[year_choice][energy_choice].std()
+    #
+    year[year_choice] = year[year_choice][(year[year_choice][x_axis_choice] <= mean + (3 * sd))]
+    # year[year_choice] = year[year_choice][(year[year_choice][energy_choice] <= mean_2 + (3 * sd_2))]
+
     values_use = []
     group = year[year_choice].groupby('country')[[x_axis_choice]].mean()
+    z = np.abs(stats.zscore(group[x_axis_choice]))
+    # print(z)
     for i in group[x_axis_choice]:
         values_use.append(i)
     list_pandas = pd.Series(i for i in values_use)
@@ -109,13 +125,13 @@ def train_and_display(energy_choice, x_axis_choice, year_choice):
     list_pandas_2 = pd.Series(i for i in values_use_2)
 
     X = list_pandas.values[:, None]
+    # print(X)
     X_train, X_test, y_train, y_test = train_test_split(
-        X,  list_pandas_2, test_size=0.25)
+        X,  list_pandas_2, test_size=0.20, shuffle=False)  #  , shuffle=False)
 
-    # doesnt calculate mean value: code below
     # X = year[year_choice][x_axis_choice].values[:, None]
     # X_train, X_test, y_train, y_test = train_test_split(
-    #     X, energy[name], test_size=0.30)
+    #     X, year[year_choice][energy_choice].values, test_size=0.25)
 
     model = LinearRegression()
     model.fit(X_train, y_train)
@@ -124,7 +140,6 @@ def train_and_display(energy_choice, x_axis_choice, year_choice):
     y_range = model.predict(x_range.reshape(-1, 1))
 
     y_pred = model.predict(X_test)
-
 
     # The coefficients
     print("Coefficients: \n", model.coef_)
@@ -140,8 +155,7 @@ def train_and_display(energy_choice, x_axis_choice, year_choice):
         go.Scatter(x=X_test.squeeze(), y=y_test, name='test', mode='markers'),
         go.Scatter(x=x_range, y=y_range, name='prediction')
     ])
-    fig.update_layout(title_text=f"<b>Coefficient of determination(correlation): {coef_detr_corr}\n"
-                                 f"<b>                      Mean squared error: {mean_sq_error}")
+    fig.update_layout(title_text=f"<b>Coefficient of determination(correlation): {coef_detr_corr}")
 
     return fig
 
