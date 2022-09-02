@@ -105,8 +105,8 @@ def cleaning_data_to_csv(data, country_csv, continent_csv, non_countries_csv):
     data_all_continents.to_csv(CURR_DIR_PATH + continent_csv, index=False)
     data_non_countries_list.to_csv(CURR_DIR_PATH + non_countries_csv, index=False)
 
-
-def pandas_to_database(file_name, table_name, postgress_pass):
+# make a table for the database
+def pandas_to_database_table(file_name, table_name, postgress_pass):
     df_final_exam = pd.read_csv(CURR_DIR_PATH + file_name)
     # print(df_final_exam)
     engine = create_engine(f'postgresql://postgres:{postgress_pass}@localhost:5432/final_exam')

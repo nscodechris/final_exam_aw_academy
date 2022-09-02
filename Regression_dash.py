@@ -20,7 +20,7 @@ pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
-
+# Linear Regression DASH!
 
 
 # setting the curr dir path
@@ -104,16 +104,15 @@ def train_and_display(energy_choice, x_axis_choice, year_choice):
 
     mean = year[year_choice][x_axis_choice].mean()
     sd = year[year_choice][x_axis_choice].std()
-    # mean_2 = year[year_choice][energy_choice].mean()
-    # sd_2 = year[year_choice][energy_choice].std()
-    #
     year[year_choice] = year[year_choice][(year[year_choice][x_axis_choice] <= mean + (3 * sd))]
-    # year[year_choice] = year[year_choice][(year[year_choice][energy_choice] <= mean_2 + (3 * sd_2))]
+
+    mean_2 = year[year_choice][energy_choice].mean()
+    sd_2 = year[year_choice][energy_choice].std()
+    year[year_choice] = year[year_choice][(year[year_choice][energy_choice] <= mean_2 + (3 * sd_2))]
 
     values_use = []
     group = year[year_choice].groupby('country')[[x_axis_choice]].mean()
-    z = np.abs(stats.zscore(group[x_axis_choice]))
-    # print(z)
+
     for i in group[x_axis_choice]:
         values_use.append(i)
     list_pandas = pd.Series(i for i in values_use)
@@ -127,7 +126,7 @@ def train_and_display(energy_choice, x_axis_choice, year_choice):
     X = list_pandas.values[:, None]
     # print(X)
     X_train, X_test, y_train, y_test = train_test_split(
-        X,  list_pandas_2, test_size=0.20, shuffle=False)  #  , shuffle=False)
+        X,  list_pandas_2, test_size=0.22, shuffle=False)  #  , shuffle=False)
 
     # X = year[year_choice][x_axis_choice].values[:, None]
     # X_train, X_test, y_train, y_test = train_test_split(

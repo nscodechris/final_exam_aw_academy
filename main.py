@@ -19,7 +19,7 @@ def main():
     ETL_data.cleaning_data_to_csv(ETL_data.etl.final_df, '//countries.csv', '//continents.csv'
                                   , '//non_countries.csv')  # enter 3 file names like: "//countries.csv"
 
-    # ETL_data.pandas_to_database("//countries.csv", "final", kglog.postgress_pass)
+    # ETL_data.pandas_to_database_table("//countries.csv", "final", kglog.postgress_pass)
 
 
 
